@@ -1,12 +1,23 @@
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useSession } from "next-auth/react";
 import { Button, Grid, TextField, Typography } from "@mui/material";
 
 export default function Create() {
+  const { data: session } = useSession();
+
   const [nameValue, setNameValue] = useState("");
   const [contentValue, setContentValue] = useState("");
+  const [nameInputDisabled, setNameInputDisabled] = useState(false);
 
   const router = useRouter();
+
+  useEffect(() => {
+    if (session && !nameValue) {
+      setNameValue(session.user?.name);
+      setNameInputDisabled(true);
+    }
+  }, [session, nameValue]);
 
   async function onFormSubmit(event) {
     event.preventDefault();
@@ -51,6 +62,7 @@ export default function Create() {
             onChange={(event) => {
               setNameValue(event.target.value);
             }}
+            disabled={nameInputDisabled}
           />
         </Grid>
         <Grid item xs={12}>

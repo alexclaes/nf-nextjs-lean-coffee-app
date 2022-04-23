@@ -8,11 +8,16 @@ import {
   Toolbar,
   Typography,
 } from "@mui/material";
+import AccountButton from "./AccountButton";
+import { Box } from "@mui/system";
 
 export default function Header() {
   return (
     <AppBar color="primary">
-      <Container maxWidth="xl">
+      <Container
+        maxWidth="xl"
+        sx={{ display: "flex", justifyContent: "space-between" }}
+      >
         <Toolbar>
           <Link href="/" passHref>
             <Button sx={{ color: "white" }} component="a">
@@ -29,6 +34,9 @@ export default function Header() {
               Create
             </Button>
           </Link>
+        </Toolbar>
+        <Toolbar>
+          <AccountButton />
         </Toolbar>
       </Container>
     </AppBar>
