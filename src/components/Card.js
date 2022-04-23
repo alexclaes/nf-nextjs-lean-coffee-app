@@ -42,8 +42,11 @@ function CardModeShow({ id, content, name, onEnableEditMode }) {
       <CardActions>
         <Button
           size="small"
-          onClick={() => {
-            console.log("Delete card", id, content, name);
+          onClick={async () => {
+            const response = await fetch("/api/card/" + id, {
+              method: "DELETE",
+            });
+            console.log(await response.json());
           }}
         >
           Delete
@@ -60,8 +63,18 @@ function CardModeEdit({ id, content, name, onDisableEditMode }) {
   const [nameValue, setNameValue] = useState(name);
   const [contentValue, setContentValue] = useState(content);
 
-  function onFormSubmit(event) {
+  async function onFormSubmit(event) {
     event.preventDefault();
+
+    const response = await fetch("/api/card/" + id, {
+      method: "PUT",
+      body: JSON.stringify({
+        name: nameValue,
+        content: contentValue,
+      }),
+    });
+    console.log(await response.json());
+
     console.log(nameValue, contentValue);
     onDisableEditMode();
   }
@@ -92,13 +105,7 @@ function CardModeEdit({ id, content, name, onDisableEditMode }) {
         />
       </CardContent>
       <CardActions>
-        <Button
-          type="submit"
-          size="small"
-          onClick={() => {
-            console.log("Delete card", id, content, name);
-          }}
-        >
+        <Button type="submit" size="small">
           Save
         </Button>
       </CardActions>

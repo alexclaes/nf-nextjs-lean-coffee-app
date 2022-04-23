@@ -1,5 +1,6 @@
-import { Grid, Typography } from "@mui/material";
-import Card from "../src/components/Card";
+import { SWRConfig } from "swr";
+import CardGrid from "../src/components/CardGrid";
+import { swrFetcher } from "../src/lib/swr-fetcher";
 import { getCards } from "../src/services/get-cards";
 
 export function getStaticProps() {
@@ -7,24 +8,17 @@ export function getStaticProps() {
 
   return {
     props: {
-      cards,
+      fallback: {
+        "/api/cards": cards,
+      },
     },
   };
 }
 
-export default function Cards({ cards }) {
+export default function Cards({ fallback }) {
   return (
-    <>
-      <Grid container spacing={4}>
-        <Grid item xs={12}>
-          <Typography variant="h1">Cards</Typography>
-        </Grid>
-        {cards.map((card) => (
-          <Grid item xs={4} key={card.id}>
-            <Card id={card.id} content={card.content} name={card.name} />
-          </Grid>
-        ))}
-      </Grid>
-    </>
+    <SWRConfig value={{ fetcher: swrFetcher, fallback }}>
+      <CardGrid />
+    </SWRConfig>
   );
 }
