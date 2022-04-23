@@ -1,15 +1,6 @@
 import Link from "next/link";
-import {
-  AppBar,
-  Button,
-  Container,
-  Menu,
-  MenuItem,
-  Toolbar,
-  Typography,
-} from "@mui/material";
+import { AppBar, Button, Container, Toolbar } from "@mui/material";
 import AccountButton from "./AccountButton";
-import { Box } from "@mui/system";
 
 export default function Header() {
   return (
