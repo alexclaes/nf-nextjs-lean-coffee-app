@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Button, Grid, TextField } from "@mui/material";
+import { Button, Grid, TextField, Typography } from "@mui/material";
 
 export default function Create() {
   const [nameValue, setNameValue] = useState("");
@@ -14,15 +14,7 @@ export default function Create() {
     <form onSubmit={onFormSubmit}>
       <Grid container spacing={4}>
         <Grid item xs={12}>
-          <TextField
-            name="name"
-            label="Name"
-            fullWidth
-            value={nameValue}
-            onChange={(event) => {
-              setNameValue(event.target.value);
-            }}
-          />
+          <Typography variant="h1">Add a new card</Typography>
         </Grid>
         <Grid item xs={12}>
           <TextField
@@ -38,8 +30,19 @@ export default function Create() {
           />
         </Grid>
         <Grid item xs={12}>
+          <TextField
+            name="name"
+            label="Name"
+            fullWidth
+            value={nameValue}
+            onChange={(event) => {
+              setNameValue(event.target.value);
+            }}
+          />
+        </Grid>
+        <Grid item xs={12}>
           <Button variant="contained" type="submit">
-            Submit
+            Create
           </Button>
         </Grid>
       </Grid>

@@ -21,7 +21,7 @@ export default function Cards({ cards }) {
         </Grid>
         {cards.map((card) => (
           <Grid item xs={4} key={card.id}>
-            <Card content={card.content} name={card.name} />
+            <Card id={card.id} content={card.content} name={card.name} />
           </Grid>
         ))}
       </Grid>
