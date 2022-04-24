@@ -1,27 +1,23 @@
-import { getCards } from "../../../src/services/get-cards";
+import { dbConnect } from "../../../src/lib/database";
+import Card from "../../../src/model/card";
 
-export default function handler(req, res) {
+export default async function handler(req, res) {
   const { id } = req.query;
 
-  const cards = getCards();
-
-  const index = cards.findIndex((card) => card.id === id);
-
-  if (index === -1) {
-    res
-      .status(404)
-      .json({ status: "error", message: "card not found", data: { id } });
-  }
+  await dbConnect();
 
   if (req.method === "DELETE") {
-    res
-      .status(200)
-      .json({ status: "success", message: "card deleted", data: { id } });
+    await Card.findByIdAndDelete(id);
+    res.status(200).json({ id });
   } else if (req.method === "PUT") {
-    res
-      .status(200)
-      .json({ status: "success", message: "card updated", data: { id } });
+    const data = JSON.parse(req.body);
+    const card = await Card.findByIdAndUpdate(id, data, {
+      new: true,
+    });
+
+    res.status(200).json({ ...card });
   } else {
-    res.status(200).json(cards[index]);
+    const card = await Card.findById(id);
+    res.status(200).json(card);
   }
 }

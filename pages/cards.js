@@ -4,8 +4,8 @@ import CardGrid from "../src/components/CardGrid";
 import { swrFetcher } from "../src/lib/swr-fetcher";
 import { getCards } from "../src/services/get-cards";
 
-export function getStaticProps() {
-  const cards = getCards();
+export async function getStaticProps() {
+  const cards = await getCards();
 
   return {
     props: {

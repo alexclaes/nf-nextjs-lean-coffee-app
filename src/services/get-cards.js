@@ -1,5 +1,16 @@
-import cards from "./static-cards.json";
+import { dbConnect } from "../lib/database";
+import Card from "../model/card";
 
-export const getCards = () => {
-  return cards;
+export const getCards = async () => {
+  await dbConnect();
+
+  const cards = await Card.find();
+
+  return cards.map(({ id, name, content }) => {
+    return {
+      id,
+      name,
+      content,
+    };
+  });
 };
