@@ -1,9 +1,9 @@
-import { Grid, Typography } from "@mui/material";
+import { Container, Grid, Typography } from "@mui/material";
 import Image from "next/image";
 
 export default function Home() {
   return (
-    <>
+    <Container maxWidth="xl">
       <Grid container spacing={4}>
         <Grid item xs={12}>
           <Typography variant="h1">My Lean Coffe App</Typography>
@@ -18,6 +18,6 @@ export default function Home() {
           />
         </Grid>
       </Grid>
-    </>
+    </Container>
   );
 }

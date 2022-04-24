@@ -1,3 +1,4 @@
+import { Container } from "@mui/material";
 import { SWRConfig } from "swr";
 import CardGrid from "../src/components/CardGrid";
 import { swrFetcher } from "../src/lib/swr-fetcher";
@@ -18,7 +19,9 @@ export function getStaticProps() {
 export default function Cards({ fallback }) {
   return (
     <SWRConfig value={{ fetcher: swrFetcher, fallback }}>
-      <CardGrid />
+      <Container maxWidth="xl">
+        <CardGrid />
+      </Container>
     </SWRConfig>
   );
 }

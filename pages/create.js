@@ -1,7 +1,7 @@
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
-import { Button, Grid, TextField, Typography } from "@mui/material";
+import { Button, Container, Grid, TextField, Typography } from "@mui/material";
 
 export default function Create() {
   const { data: session } = useSession();
@@ -35,42 +35,44 @@ export default function Create() {
   }
 
   return (
-    <form onSubmit={onFormSubmit}>
-      <Grid container spacing={4}>
-        <Grid item xs={12}>
-          <Typography variant="h1">Add a new card</Typography>
+    <Container maxWidth="xl">
+      <form onSubmit={onFormSubmit}>
+        <Grid container spacing={4}>
+          <Grid item xs={12}>
+            <Typography variant="h1">Add a new card</Typography>
+          </Grid>
+          <Grid item xs={12}>
+            <TextField
+              name="content"
+              label="Content"
+              fullWidth
+              multiline
+              rows={4}
+              value={contentValue}
+              onChange={(event) => {
+                setContentValue(event.target.value);
+              }}
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <TextField
+              name="name"
+              label="Name"
+              fullWidth
+              value={nameValue}
+              onChange={(event) => {
+                setNameValue(event.target.value);
+              }}
+              disabled={nameInputDisabled}
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <Button variant="contained" type="submit">
+              Create
+            </Button>
+          </Grid>
         </Grid>
-        <Grid item xs={12}>
-          <TextField
-            name="content"
-            label="Content"
-            fullWidth
-            multiline
-            rows={4}
-            value={contentValue}
-            onChange={(event) => {
-              setContentValue(event.target.value);
-            }}
-          />
-        </Grid>
-        <Grid item xs={12}>
-          <TextField
-            name="name"
-            label="Name"
-            fullWidth
-            value={nameValue}
-            onChange={(event) => {
-              setNameValue(event.target.value);
-            }}
-            disabled={nameInputDisabled}
-          />
-        </Grid>
-        <Grid item xs={12}>
-          <Button variant="contained" type="submit">
-            Create
-          </Button>
-        </Grid>
-      </Grid>
-    </form>
+      </form>
+    </Container>
   );
 }
