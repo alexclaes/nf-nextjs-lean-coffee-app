@@ -1,37 +1,28 @@
-import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
-import { useSession } from "next-auth/react";
-import { Button, Grid, TextField, Typography } from "@mui/material";
+import { useRouter } from 'next/router';
+import { useState } from 'react';
+import { useSession } from 'next-auth/react';
+import { Button, Grid, TextField, Typography } from '@mui/material';
 
 export default function CardCreateForm() {
   const { data: session } = useSession();
 
-  const [nameValue, setNameValue] = useState("");
-  const [contentValue, setContentValue] = useState("");
-  const [nameInputDisabled, setNameInputDisabled] = useState(false);
+  const [contentValue, setContentValue] = useState('');
 
   const router = useRouter();
-
-  useEffect(() => {
-    if (session && !nameValue) {
-      setNameValue(session.user?.name);
-      setNameInputDisabled(true);
-    }
-  }, [session, nameValue]);
 
   async function onFormSubmit(event) {
     event.preventDefault();
 
-    const response = await fetch("/api/card/create", {
-      method: "POST",
+    const response = await fetch('/api/card/create', {
+      method: 'POST',
       body: JSON.stringify({
-        name: nameValue,
         content: contentValue,
+        user: session.user,
       }),
     });
     console.log(await response.json());
 
-    router.push("/cards");
+    router.push('/cards');
   }
 
   return (
@@ -58,11 +49,8 @@ export default function CardCreateForm() {
             name="name"
             label="Name"
             fullWidth
-            value={nameValue}
-            onChange={(event) => {
-              setNameValue(event.target.value);
-            }}
-            disabled={nameInputDisabled}
+            value={session.user.name}
+            disabled
           />
         </Grid>
         <Grid item xs={12}>

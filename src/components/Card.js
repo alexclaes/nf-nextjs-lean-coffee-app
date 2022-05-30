@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState } from 'react';
 import {
   Button,
   Card as MuiCard,
@@ -6,8 +6,10 @@ import {
   CardContent,
   TextField,
   Typography,
-} from "@mui/material";
-import { useSWRConfig } from "swr";
+} from '@mui/material';
+import { useSWRConfig } from 'swr';
+import { useSession } from 'next-auth/react';
+import Image from 'next/image';
 
 export default function Card(props) {
   const [isEditMode, setIsEditMode] = useState(false);
@@ -31,7 +33,8 @@ export default function Card(props) {
   );
 }
 
-function CardModeShow({ id, content, name, onEnableEditMode }) {
+function CardModeShow({ id, content, user, onEnableEditMode }) {
+  const { data: session } = useSession();
   const { mutate } = useSWRConfig();
 
   return (
@@ -40,47 +43,48 @@ function CardModeShow({ id, content, name, onEnableEditMode }) {
         <Typography variant="h5" component="p">
           {content}
         </Typography>
-        <Typography>{name}</Typography>
+        <Image src={user.image} width="32" height="32" alt={user.name} />
+        <Typography component="span">{user.name}</Typography>
       </CardContent>
-      <CardActions>
-        <Button
-          size="small"
-          onClick={async () => {
-            const response = await fetch("/api/card/" + id, {
-              method: "DELETE",
-            });
-            console.log(await response.json());
-            mutate("/api/cards");
-          }}
-        >
-          Delete
-        </Button>
-        <Button size="small" onClick={onEnableEditMode}>
-          Edit
-        </Button>
-      </CardActions>
+      {session && session.user.email === user.email && (
+        <CardActions>
+          <Button
+            size="small"
+            onClick={async () => {
+              const response = await fetch('/api/card/' + id, {
+                method: 'DELETE',
+              });
+              console.log(await response.json());
+              mutate('/api/cards');
+            }}
+          >
+            Delete
+          </Button>
+          <Button size="small" onClick={onEnableEditMode}>
+            Edit
+          </Button>
+        </CardActions>
+      )}
     </>
   );
 }
 
-function CardModeEdit({ id, content, name, onDisableEditMode }) {
-  const [nameValue, setNameValue] = useState(name);
+function CardModeEdit({ id, content, user, onDisableEditMode }) {
   const [contentValue, setContentValue] = useState(content);
   const { mutate } = useSWRConfig();
 
   async function onFormSubmit(event) {
     event.preventDefault();
 
-    const response = await fetch("/api/card/" + id, {
-      method: "PUT",
+    const response = await fetch('/api/card/' + id, {
+      method: 'PUT',
       body: JSON.stringify({
-        name: nameValue,
         content: contentValue,
       }),
     });
     console.log(await response.json());
 
-    mutate("/api/cards");
+    mutate('/api/cards');
     onDisableEditMode();
   }
 
@@ -103,10 +107,8 @@ function CardModeEdit({ id, content, name, onDisableEditMode }) {
           name="name"
           label="Name"
           fullWidth
-          value={nameValue}
-          onChange={(event) => {
-            setNameValue(event.target.value);
-          }}
+          value={user.name}
+          disabled
         />
       </CardContent>
       <CardActions>
